@@ -7,10 +7,16 @@ with open("stations.csv") as file:
     reader = DictReader(file)
     station_data = list(reader)
 
-## reading the stations code
+# reading the stations code
+## creating the precipitation_dict to store all of the data
+precipitation_dict = {}
+## making the station dictionary to be able to convert the station code into the location 
 station_dict = {}
 for location in station_data:
-    station_dict[location["Location"]] = location 
+    station_dict[location["Station"]] = location["Location"]
+    precipitation_dict[location["Location"]] = {}
+    precipitation_dict[location["Location"]]["station"] = location["Station"]
+    precipitation_dict[location["Location"]]["state"] = location["State"]
 
 ## reading the json file
 with open("precipitation.json") as file:
@@ -25,14 +31,10 @@ for data in precipitation_data:
     else:
         precipitation_data_station[data["station"]].append(data)
 
-## making the dictionary where all output will go to
-precipitation_dict = {}
-
 # calculating monthly and total year precipitation 
-## iterating for every station
+# iterating for every station
 for station in precipitation_data_station:
 ## creating a new dictionary and list for every iteration
-    precipitation_dict[station] = {}
     station_precipitation_dict = {}
     station_precipitation_list = []
     total_yearly_precipitation = 0
@@ -50,44 +52,32 @@ for station in precipitation_data_station:
     for data in station_precipitation_dict:
         station_precipitation_list.append(station_precipitation_dict[data])
     ## putting the individual station data into a dictionary with all of the other stations
-    precipitation_dict[station]["monthly_precipitation"] = station_precipitation_list
-    precipitation_dict[station]["yearly_precipitation"] = total_yearly_precipitation
+    precipitation_dict[station_dict[station]]["total_monthly_precipitation"] = station_precipitation_list
+    precipitation_dict[station_dict[station]]["total_yearly_precipitation"] = total_yearly_precipitation
 
 # calculating the relative_monthly_precipitation
 ## iterating every station in the dictionary
-for station in precipitation_dict:
+for location in precipitation_dict:
     ## creating the empty list for relative_monthly_precipitation inside the dictionary
-    precipitation_dict[station]["relative_monthly_precipitation"] = []
+    precipitation_dict[location]["relative_monthly_precipitation"] = []
     ## iterating every monthly precipitation data in the station
-    for data in precipitation_dict[station]["monthly_precipitation"]:
+    for data in precipitation_dict[location]["total_monthly_precipitation"]:
         ## calculation, rounding it to 4 decimal points
-        calculation = round(data/precipitation_dict[station]["yearly_precipitation"], 4)
+        calculation = round(data/precipitation_dict[location]["total_yearly_precipitation"], 4)
         ## adding it to the main dictionary
-        precipitation_dict[station]["relative_monthly_precipitation"].append(calculation)
-        
+        precipitation_dict[location]["relative_monthly_precipitation"].append(calculation)
+
 # calculating the relative_yearly_precipitation
 ## calculating the sum of all stations
 total_yearly_all = 0
-for station in precipitation_dict:
-    total_yearly_all += (precipitation_dict[station]["yearly_precipitation"])
+for location in precipitation_dict:
+    total_yearly_all += (precipitation_dict[location]["total_yearly_precipitation"])
 
 ## calculating the relative_yearly_precipitation and adding it to the dictionary
-for station in precipitation_dict:
-    calculation = round(precipitation_dict[station]["yearly_precipitation"]/total_yearly_all, 4)
-    precipitation_dict[station]["relative_yearly_precipitation"] = calculation
+for location in precipitation_dict:
+    calculation = round(precipitation_dict[location]["total_yearly_precipitation"]/total_yearly_all, 4)
+    precipitation_dict[location]["relative_yearly_precipitation"] = calculation
 
-## creating the output data
-
-# output = {
-#     "Seattle":{
-#             "station": "GHCND:US1WAKG0038",
-#             "state": "WA",
-#             "total_monthly_precipitation": seattle_monthly_precipitation,
-#             "total_yearly_precipitation": total_yearly_precipitation,
-#             "relative_monthly_precipitation": relative_monthly_precipitation
-#         }    
-# }    
-
-# ## dumping into json
-# with open("weather_assignment/results.json", "w") as file:
-#     json.dump(output, file, indent = 4)
+## dumping into json
+with open("results.json", "w") as file:
+    json.dump(precipitation_dict, file, indent = 4)

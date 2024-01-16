@@ -1,4 +1,38 @@
 {
+    "Cincinnati": {
+        "station": "GHCND:USW00093814",
+        "state": "OH",
+        "total_monthly_precipitation": [
+            512,
+            588,
+            889,
+            491,
+            1439,
+            1764,
+            614,
+            290,
+            145,
+            377,
+            1762,
+            450
+        ],
+        "total_yearly_precipitation": 9321,
+        "relative_monthly_precipitation": [
+            0.0549,
+            0.0631,
+            0.0954,
+            0.0527,
+            0.1544,
+            0.1893,
+            0.0659,
+            0.0311,
+            0.0156,
+            0.0404,
+            0.189,
+            0.0483
+        ],
+        "relative_yearly_precipitation": 0.2969
+    },
     "Seattle": {
         "station": "GHCND:US1WAKG0038",
         "state": "WA",
@@ -30,6 +64,75 @@
             0.0812,
             0.1066,
             0.2107
-        ]
+        ],
+        "relative_yearly_precipitation": 0.3561
+    },
+    "Maui": {
+        "station": "GHCND:USC00513317",
+        "state": "HI",
+        "total_monthly_precipitation": [
+            362,
+            201,
+            861,
+            553,
+            89,
+            144,
+            276,
+            259,
+            270,
+            432,
+            846,
+            833
+        ],
+        "total_yearly_precipitation": 5126,
+        "relative_monthly_precipitation": [
+            0.0706,
+            0.0392,
+            0.168,
+            0.1079,
+            0.0174,
+            0.0281,
+            0.0538,
+            0.0505,
+            0.0527,
+            0.0843,
+            0.165,
+            0.1625
+        ],
+        "relative_yearly_precipitation": 0.1633
+    },
+    "San Diego": {
+        "station": "GHCND:US1CASD0032",
+        "state": "CA",
+        "total_monthly_precipitation": [
+            1323,
+            853,
+            144,
+            481,
+            5,
+            3,
+            34,
+            0,
+            14,
+            617,
+            394,
+            1903
+        ],
+        "total_yearly_precipitation": 5771,
+        "relative_monthly_precipitation": [
+            0.2292,
+            0.1478,
+            0.025,
+            0.0833,
+            0.0009,
+            0.0005,
+            0.0059,
+            0.0,
+            0.0024,
+            0.1069,
+            0.0683,
+            0.3298
+        ],
+        "relative_yearly_precipitation": 0.1838
     }
 }
