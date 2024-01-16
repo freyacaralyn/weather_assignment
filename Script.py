@@ -27,13 +27,12 @@ for data in precipitation_data:
 
 ## making the dictionary where all output will go to
 precipitation_dict = {}
-precipitation_dict["monthly_precipitation"] = {}
-precipitation_dict["yearly_precipitation"] = {}
-precipitation_dict["relative_monthly_precipitation"]  = {}
 
+# calculating monthly and total year precipitation 
 ## iterating for every station
 for station in precipitation_data_station:
 ## creating a new dictionary and list for every iteration
+    precipitation_dict[station] = {}
     station_precipitation_dict = {}
     station_precipitation_list = []
     total_yearly_precipitation = 0
@@ -51,24 +50,34 @@ for station in precipitation_data_station:
     for data in station_precipitation_dict:
         station_precipitation_list.append(station_precipitation_dict[data])
     ## putting the individual station data into a dictionary with all of the other stations
-    precipitation_dict["monthly_precipitation"][station] = station_precipitation_list
-    precipitation_dict["yearly_precipitation"][station] = total_yearly_precipitation
+    precipitation_dict[station]["monthly_precipitation"] = station_precipitation_list
+    precipitation_dict[station]["yearly_precipitation"] = total_yearly_precipitation
 
-# for station in precipitation_dict["monthly_precipitation"]:
-#     for data in precipitation_dict["monthly_precipitation"][station]:
-#         calculation = round(data/precipitation_dict["yearly_precipitation"][station], 4)
-#         precipitation_dict["relative_monthly_precipitation"][station].append(calculation)
+# calculating the relative_monthly_precipitation
+## iterating every station in the dictionary
+for station in precipitation_dict:
+    ## creating the empty list for relative_monthly_precipitation inside the dictionary
+    precipitation_dict[station]["relative_monthly_precipitation"] = []
+    ## iterating every monthly precipitation data in the station
+    for data in precipitation_dict[station]["monthly_precipitation"]:
+        ## calculation, rounding it to 4 decimal points
+        calculation = round(data/precipitation_dict[station]["yearly_precipitation"], 4)
+        ## adding it to the main dictionary
+        precipitation_dict[station]["relative_monthly_precipitation"].append(calculation)
         
+# calculating the relative_yearly_precipitation
+## calculating the sum of all stations
+total_yearly_all = 0
+for station in precipitation_dict:
+    total_yearly_all += (precipitation_dict[station]["yearly_precipitation"])
 
+## calculating the relative_yearly_precipitation and adding it to the dictionary
+for station in precipitation_dict:
+    calculation = round(precipitation_dict[station]["yearly_precipitation"]/total_yearly_all, 4)
+    precipitation_dict[station]["relative_yearly_precipitation"] = calculation
 
+## creating the output data
 
-# ## calculating relative_monthly_precipitation
-# relative_monthly_precipitation = []
-# for data in seattle_monthly_precipitation:
-#     calculation = round(data/total_yearly_precipitation, 4)
-#     relative_monthly_precipitation.append(calculation)
-
-# ## creating the output data
 # output = {
 #     "Seattle":{
 #             "station": "GHCND:US1WAKG0038",
